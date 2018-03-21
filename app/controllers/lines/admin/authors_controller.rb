@@ -1,11 +1,10 @@
 # Provides CRUD actions for +Author+ model.
 
-require_dependency "lines/admin/application_controller"
+require_dependency 'lines/admin/application_controller'
 
 module Lines
   module Admin
     class AuthorsController < ApplicationController
-
       # Listes all authroes
       def index
         @authors = Author.all
@@ -33,7 +32,7 @@ module Lines
         if @author.save
           redirect_to admin_author_path @author
         else
-          render action: "new"
+          render action: 'new'
         end
       end
 
@@ -44,7 +43,7 @@ module Lines
         if @author.update_attributes(author_params)
           redirect_to admin_author_path(@author)
         else
-          render action: "edit"
+          render action: 'edit'
         end
       end
 
@@ -55,17 +54,16 @@ module Lines
           redirect_to admin_authors_url
         else
           @authors = Author.all
-          render "index" 
+          render 'index'
         end
       end
 
       private
 
-        # Use strong_params
-        def author_params
-          params.require(:author).permit(:email, :name, :description, :gplus_profile)
-        end
+      # Use strong_params
+      def author_params
+        params.require(:author).permit(:email, :name, :description, :gplus_profile)
+      end
     end
-
   end
 end

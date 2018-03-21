@@ -1,6 +1,5 @@
 module Lines
   class ApplicationController < ActionController::Base
-
     private
 
       # sets the current_lines_user if one exists in session
@@ -13,6 +12,5 @@ module Lines
       def authorize
         redirect_to login_url, notice: t('lines.please_login') if current_lines_user.nil?
       end
-
   end
 end

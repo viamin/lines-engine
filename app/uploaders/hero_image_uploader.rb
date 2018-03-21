@@ -1,7 +1,5 @@
-# encoding: utf-8
 # CarrierWave uploader for hero images.
 class HeroImageUploader < CarrierWave::Uploader::Base
-
   include CarrierWave::RMagick
 
   # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
@@ -17,15 +15,14 @@ class HeroImageUploader < CarrierWave::Uploader::Base
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
 
-  process :resize_to_limit => [960, 960]
+  process resize_to_limit: [960, 960]
 
   # Returns URL for image-asset
   def default_url
-    "/assets/heroes/" + [filename].compact.join('_')
+    '/assets/heroes/' + [filename].compact.join('_')
   end
 
   def root
     Rails.root.join 'public/'
   end
-
 end

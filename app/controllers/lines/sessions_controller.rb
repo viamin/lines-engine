@@ -1,16 +1,12 @@
 # Creates (login) and destroys (logout) sessions
-require_dependency "lines/application_controller"
+require_dependency 'lines/application_controller'
 
 module Lines
-
   class SessionsController < ApplicationController
+    layout 'lines/admin'
 
-    layout "lines/admin"
-
-    
-    # Renders form for creating a new article 
-    def new
-    end
+    # Renders form for creating a new article
+    def new; end
 
     # Authenticate user and create a new session.
     def create
@@ -20,7 +16,7 @@ module Lines
         redirect_to admin_root_url
       else
         flash.now[:error] = t('lines.login_error')
-        render "new"
+        render 'new'
       end
     end
 
@@ -30,5 +26,4 @@ module Lines
       redirect_to root_url
     end
   end
-
 end

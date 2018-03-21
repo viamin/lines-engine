@@ -1,7 +1,5 @@
-# encoding: utf-8
-# CarrierWave uploader for +Picture+ model. 
+# CarrierWave uploader for +Picture+ model.
 class PictureUploader < CarrierWave::Uploader::Base
-
   include CarrierWave::RMagick
 
   # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
@@ -25,9 +23,9 @@ class PictureUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_white_list
-    %w(jpg jpeg gif png)
+    %w[jpg jpeg gif png]
   end
-  
+
   def root
     Rails.root.join 'public/'
   end

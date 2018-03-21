@@ -1,9 +1,9 @@
-# {Article}s are the core of the lines blog. 
-# 
+# {Article}s are the core of the lines blog.
+#
 # An {Article} must have on or more {Author}s through {Authorable}.
-# 
-# An article extends FriendlyId to provide meaningful slugs instead of the usual id value. 
-# 
+#
+# An article extends FriendlyId to provide meaningful slugs instead of the usual id value.
+#
 # Slugs are unique and contain the article's title. A incremental numerical value
 # is added to the slug title if the it already exists in the database.
 
@@ -16,7 +16,7 @@ require 'friendly_id'
 module Lines
   class Article < Lines::ApplicationRecord
     extend FriendlyId
-    friendly_id :title, use: [:slugged, :history, :finders]
+    friendly_id :title, use: %i[slugged history finders]
 
     # Relations
     has_many :pictures
@@ -25,7 +25,6 @@ module Lines
 
     attr_accessor :hero_image_file
     accepts_nested_attributes_for :pictures, :authors
-
 
     # Mount Carrierwave uploaders
     mount_uploader :hero_image, HeroImageUploader
@@ -37,13 +36,13 @@ module Lines
 
     # Validations
     validates :title, :content, :author_ids, :published_at, presence: true
-    #validate :one_image_selected
+    # validate :one_image_selected
 
     # Callbacks
     after_save :update_used_images, :refresh_sitemap
 
     # Model Scopes
-    scope :published, -> { where(published: true).order("featured DESC, published_at DESC, created_at DESC") }
+    scope :published, -> { where(published: true).order('featured DESC, published_at DESC, created_at DESC') }
 
     # Predifined hero images.
     # Images are loaded from the <tt>public/heroes</tt> directory
@@ -51,19 +50,19 @@ module Lines
 
     # Returns URL of selected image from HERO_IMAGES array
     def short_hero_image_url
-      "#{self.short_hero_image}"
+      short_hero_image.to_s
     end
 
     # Returns array of images used in content
     def used_images
       result = content.scan(/!\[.*\]\(.*\/image\/(\d.*)\/.*\)/)
-      image_ids = result.nil? ? nil : result.map{ |i| i[0].to_i }.uniq
+      image_ids = result.nil? ? nil : result.map { |i| i[0].to_i }.uniq
       image_ids
     end
 
     # Returns the url for the hero image
     def image_url
-      image = self.hero_image? ? self.hero_image.url : self.short_hero_image
+      image = hero_image? ? hero_image.url : short_hero_image
     end
 
     # Returns the absolute url for the hero image
@@ -76,36 +75,32 @@ module Lines
       read_attribute(:sub_title) || ''
     end
 
-  private
+    private
 
     # Finds images used in an articles content and associates each
     # image to the blog article
     def update_used_images
       ActionController::Base.new.expire_fragment(self)
-      image_ids = self.used_images
-      if !image_ids.nil?
-        Picture.where(id: image_ids).each do |picture|
-          picture.update_attributes(article_id: self.id)
-        end
+      image_ids = used_images
+      return if image_ids.nil?
+      Picture.where(id: image_ids).each do |picture|
+        picture.update_attributes(article_id: id)
       end
     end
 
     # Refreshes the sitemap and pings the search engines
     def refresh_sitemap
-      if self.published
-        if Rails.env == 'production' && ENV["CONFIG_FILE"]
-          SitemapGenerator::Interpreter.run(config_file: ENV["CONFIG_FILE"])
-          SitemapGenerator::Sitemap.ping_search_engines 
-        end
-      end
+      return unless published
+      return unless Rails.env == 'production' && ENV['CONFIG_FILE']
+      SitemapGenerator::Interpreter.run(config_file: ENV['CONFIG_FILE'])
+      SitemapGenerator::Sitemap.ping_search_engines
     end
 
     # Validates if either a predefined hero image is selected or a custom hero
-    # image uploaded. 
+    # image uploaded.
     def one_image_selected
-      if both_images_selected || no_image_selected
-        errors[:base] << 'You have to either select an image or upload one.'
-      end
+      return unless both_images_selected || no_image_selected
+      errors[:base] << 'You have to either select an image or upload one.'
     end
 
     # Returns true if both a hero image is uploaded and a predefined hero image is selected
@@ -122,6 +117,5 @@ module Lines
     def absolute_url_for(image)
       image = "//#{CONFIG[Rails.env.to_sym]['host']}#{image}"
     end
-
   end
 end

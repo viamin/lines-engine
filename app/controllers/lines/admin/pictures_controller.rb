@@ -1,9 +1,8 @@
 # Handles file uploads for content pictures.
-require_dependency "lines/admin/application_controller"
+require_dependency 'lines/admin/application_controller'
 
 module Lines
   module Admin
-
     class PicturesController < ApplicationController
       def create
         @picture = Picture.create(picture_params)
@@ -17,7 +16,7 @@ module Lines
           if @picture.update_attributes(picture_params[:picture])
             format.html { redirect_to @picture }
           else
-            format.html { render action: "edit" }
+            format.html { render action: 'edit' }
           end
         end
       end
@@ -34,11 +33,10 @@ module Lines
 
       private
 
-        # strong_params
-        def picture_params
-          params.fetch(:picture, {}).permit(:image)
-        end
+      # strong_params
+      def picture_params
+        params.fetch(:picture, {}).permit(:image)
+      end
     end
-  
   end
 end

@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount Lines::Engine => "/"
+  mount Lines::Engine => '/'
 end

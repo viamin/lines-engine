@@ -1,29 +1,28 @@
-require "spec_helper"
+require 'spec_helper'
 
 module Lines
-
   describe Author do
-    it "has a valid factory" do
-      FactoryGirl.create(:author).should be_valid
+    it 'has a valid factory' do
+      expect(FactoryBot.create(:author)).to be_valid
     end
 
-    it "is invalid without a name" do
-      FactoryGirl.build(:author, name: nil).should_not be_valid
+    it 'is invalid without a name' do
+      expect(FactoryBot.build(:author, name: nil)).not_to be_valid
     end
 
-    it "is invalid without an email" do
-      FactoryGirl.build(:author, email: nil).should_not be_valid
+    it 'is invalid without an email' do
+      expect(FactoryBot.build(:author, email: nil)).not_to be_valid
     end
 
-    it "is invalid without a description" do
-      FactoryGirl.build(:author, description: nil).should_not be_valid
+    it 'is invalid without a description' do
+      expect(FactoryBot.build(:author, description: nil)).not_to be_valid
     end
 
-    it "can not be deleted if belonging to one or more articles" do
-      author = FactoryGirl.create(:author)
-      author.articles << FactoryGirl.create(:article)
-      author.destroy.should be_false
+    it 'can not be deleted if belonging to one or more articles' do
+      author = FactoryBot.create(:author)
+      author.articles << FactoryBot.create(:article)
+      # author.destroy.should be false
+      expect { author.destroy }.not_to change(Author, :count)
     end
   end
-
 end

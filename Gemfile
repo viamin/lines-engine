@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 # Declare your gem's dependencies in lines.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -13,30 +13,29 @@ gemspec
 # To use debugger
 # gem 'debugger'
 
-#gem 'friendly_id', github: 'norman/friendly_id'
-#gem 'rails3-jquery-autocomplete', github: 'francisd/rails3-jquery-autocomplete'
-#gem 'meta-tags', require: 'meta_tags'
-#gem 'rack-ssl-enforcer', require: 'rack/ssl-enforcer'
-#gem 'acts-as-taggable-on', '~> 3.5.0'
-
+# gem 'friendly_id', github: 'norman/friendly_id'
+# gem 'rails3-jquery-autocomplete', github: 'francisd/rails3-jquery-autocomplete'
+# gem 'meta-tags', require: 'meta_tags'
+# gem 'rack-ssl-enforcer', require: 'rack/ssl-enforcer'
+# gem 'acts-as-taggable-on', '~> 3.5.0'
 
 group :development do
+  gem 'autoprefixer-rails'
   gem 'capistrano'
   gem 'yard'
-  gem 'autoprefixer-rails'
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.14.0'
-  gem 'factory_girl_rails', require: false
+  gem 'factory_bot_rails', require: false
+  gem 'pg', '< 1'
   gem 'railroady'
   gem 'thor'
 end
 
 group :test do
-  gem 'faker'
   gem 'capybara'
-  gem 'guard-rspec', '= 4.2.0'
-  gem 'rb-inotify', '~> 0.9'
+  gem 'faker'
+  gem 'guard-rspec', '~> 4.7.0'
+  # gem 'rb-inotify', '~> 0.9'
   gem 'launchy'
 end

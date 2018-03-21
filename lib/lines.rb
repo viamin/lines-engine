@@ -1,7 +1,5 @@
 module Lines
-  if defined?(Rails)
-    require "lines/engine"
-  end
+  require 'lines/engine' if defined?(Rails)
 
   # host application root path
   # We set this when the engine is initialized

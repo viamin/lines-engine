@@ -1,7 +1,7 @@
-# {User}s are the administrators of a blog. 
+# {User}s are the administrators of a blog.
 # Since there is no interface to manage users, they have to be modified via
-# Rails console. 
-# 
+# Rails console.
+#
 # Examples:
 #   rails c
 #   # Create a new user:
@@ -13,11 +13,10 @@
 #   u.save
 
 module Lines
-
   class User < Lines::ApplicationRecord
     # Use bcrypt-ruby to encrypt passwords
     has_secure_password validations: false
-    
+
     attr_accessor :reset_token
 
     # Validations
@@ -44,14 +43,13 @@ module Lines
       BCrypt::Password.new(digest).is_password?(token)
     end
 
-
     # Generate a random token.
-    def User.generate_token
+    def self.generate_token
       SecureRandom.urlsafe_base64
     end
 
     # Returns the hash digest of the given string.
-    def User.digest(string)
+    def self.digest(string)
       cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
       BCrypt::Password.create(string, cost: cost)
     end
@@ -61,12 +59,11 @@ module Lines
       reset_sent_at < 2.hours.ago
     end
 
+    private
 
-    private 
-      # Returns +true+ if a password is submitted
-      def validate_password?
-        password.present?
-      end
-
+    # Returns +true+ if a password is submitted
+    def validate_password?
+      password.present?
+    end
   end
 end

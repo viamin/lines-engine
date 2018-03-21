@@ -2,11 +2,11 @@
 config_file = Rails.root.join('config', 'lines_config.yml')
 
 # use engine's config file if not exists in host app
-unless File.exists?(config_file)
+unless File.exist?(config_file)
   config_file = Lines::Engine.root.join('config', 'lines_config.yml')
 end
 
 # Load the configuration
-CONFIG = YAML.load(ERB.new(config_file).result)
+CONFIG = YAML.safe_load(ERB.new(File.read(config_file)).result)
 CONFIG.merge! CONFIG.fetch(Rails.env, {})
 CONFIG.symbolize_keys!
